@@ -2,11 +2,14 @@
 import mongoose,{Schema,Document} from 'mongoose';
 import {translate} from '@vitalets/google-translate-api';
 
+import languageAvailable  from '@/constants/languages'
+
+
 
 export interface FAQ extends Document{
     question:string,
     answer:string,
-    tranlations:object
+    translations:Map<string,{question:string,answer:string}>
 }
 
 const FaqSchema = new Schema({
@@ -24,13 +27,14 @@ const FaqSchema = new Schema({
           question: String,
           answer: String
         },
-        default: () => new Map() // Ensure translations is initialized as a Map
+        default: () => new Map() 
     }
 })
 
 FaqSchema.pre('save',async function(next){
+    console.log('pre save hook');
     if(this.isModified('question') || this.isModified('answer')){
-       const languages = ['en','hi','bn','fr'];
+       const languages = languageAvailable.map(lang => lang.key);
        const translations = new Map<string, { question: string, answer: string }>();
 
        for(const lang of languages){
@@ -42,6 +46,7 @@ FaqSchema.pre('save',async function(next){
                     question: translatedQuestion.text,
                     answer: translatedAnswer.text
                   });
+                await delay(1000) 
             } catch (error) {
                 console.error(`Error translating to ${lang}:`, error);
             }
@@ -57,3 +62,7 @@ FaqSchema.pre('save',async function(next){
 const FaqModel = (mongoose.models.Faq as mongoose.Model<FAQ>) || mongoose.model<FAQ>('Faq',FaqSchema);
 
 export default FaqModel;
+
+function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
