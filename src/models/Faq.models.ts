@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import mongoose,{Schema,Document} from 'mongoose';
 import {translate} from '@vitalets/google-translate-api';
 
@@ -53,4 +53,7 @@ FaqSchema.pre('save',async function(next){
     next();
 });
 
-export default mongoose.model<FAQ>('FAQ',FaqSchema);
+
+const FaqModel = (mongoose.models.Faq as mongoose.Model<FAQ>) || mongoose.model<FAQ>('Faq',FaqSchema);
+
+export default FaqModel;
