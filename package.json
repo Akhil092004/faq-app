@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/translate": "^8.5.0",
     "@radix-ui/react-select": "^2.1.5",
     "@tinymce/tinymce-react": "^5.1.1",
     "@vitalets/google-translate-api": "^9.2.1",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "htmlparser2": "^10.0.0",
     "http-proxy-agent": "^7.0.2",
     "lucide-react": "^0.474.0",
     "mongoose": "^8.9.6",
